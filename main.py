@@ -1,5 +1,6 @@
 flag = False
 
+
 def createSquare():
     n = int(input())
 
@@ -20,7 +21,7 @@ def createSquare():
     return square
 
 
-def checkMagicSquare(square, flag_m):
+def checkMagicSquare(square):
     n = len(square)
 
     row_sums = [sum(row) for row in square]
@@ -32,57 +33,54 @@ def checkMagicSquare(square, flag_m):
     side_diagonal_sums = [sum(square[i][n - i - 1] for i in range(n))]
 
     if all(x == row_sums[0] for x in row_sums + column_sums + diagonal_sums + side_diagonal_sums):
-        print("Yes, it's the Magic Square\n", end="\n")
-        flag_m = True
+        print(f"Yes, it's the Magic Square\n", end="\n")
+        return True
     else:
-        print("No, isn't the Magic Square\n", end="\n")
-
-    return flag_m
+        print(f"No, isn't the Magic Square\n", end="\n")
+        return False
 
 
 def checkMaxElement(square):
     n = len(square)
-    max_element_row = [max(row) for row in square]
-    min_element_column = [min(square[i][j] for i in range(n)) for j in range(n)]
 
     saddle_points = []
 
-    for i in range(n):
-        for j in range(n):
-            if square[i][j] == max_element_row[i] and square[i][j] == min_element_column[j]:
-                saddle_points.append((i, j))
+    max_element_row = [max(row) for row in square]
+    min_element_column = [min(square[i][j] for i in range(n)) for j in range(n)]
+
+    saddle_points.append(max_element_row)
+    saddle_points.append(min_element_column)
 
     if saddle_points:
-        print(f"Yes, Magic Square has saddle points in rows: {saddle_points}\n")
+        print(f"Yes, Magic Square has saddle points max in rows, min in columns: {saddle_points}\n")
     else:
-        print("No, Magic Square hasn't saddle points in rows\n")
+        print(f"No, Magic Square hasn't saddle points max in rows, min in columns\n")
 
 
 def checkMinElement(square):
     n = len(square)
 
+    saddle_points = []
+
     min_element_row = [min(row) for row in square]
 
     max_element_column = [max(square[i][j] for i in range(n)) for j in range(n)]
 
-    saddle_points = []
-
-    for i in range(n):
-        for j in range(n):
-            if square[i][j] == min_element_row[i] and square[i][j] == max_element_column[j]:
-                saddle_points.append((i, j))
+    saddle_points.append(min_element_row)
+    saddle_points.append(max_element_column)
 
     if saddle_points:
-        print(f"Yes, Magic Square has saddle points in columns: {saddle_points}\n", end="\n")
+        print(f"Yes, Magic Square has saddle points max in columns, min in rows: {saddle_points}\n", end="\n")
     else:
-        print("No, Magic Square hasn't saddle points in columns \n", end="\n")
+        print("No, Magic Square hasn't saddle points max in columns, min in rows\n", end="\n")
 
 
 if __name__ == '__main__':
     magic_square = createSquare()
 
-    checkMagicSquare(magic_square, flag)
+    flag = checkMagicSquare(magic_square)
 
-    checkMaxElement(magic_square)
+    if flag:
+        checkMaxElement(magic_square)
 
-    checkMinElement(magic_square)
+        checkMinElement(magic_square)
